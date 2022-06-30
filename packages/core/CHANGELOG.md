@@ -1,5 +1,345 @@
 # @usedapp/core
 
+## 1.0.15
+
+### Patch Changes
+
+- 31c4833: 👨🏻‍💼 Add private key sending transactions
+- 31e0475: Return error in useCall when multicall fails
+
+## 1.0.14
+
+### Patch Changes
+
+- d07e0df: Fix refreshing cycle in ReadonlyNetworksProvider
+
+## 1.0.13
+
+### Patch Changes
+
+- d596405: ➕ Add stricter contract type check on the useLogs hook
+- 57e7582: 🔝 Update Nanoid version
+
+## 1.0.12
+
+### Patch Changes
+
+- 5776ed9: Add option to config to specify different polling intervals for different chains
+
+## 1.0.11
+
+### Patch Changes
+
+- 453b489: Don't poll readonly chains when unused
+
+## 1.0.10
+
+### Patch Changes
+
+- d835054: ⛓ Add arbitrum reddit test chain
+- 2909416: Fix refresh field in QueryOptions
+- 55a28a2: 🐺 More extensive check for provider object in `renderWeb3Hook`
+
+## 1.0.9
+
+### Patch Changes
+
+- 2888a3e: 🥗 Fix multiple deploying multicall during localhost connection
+- c4b8ae0: Add error code to transaction status
+- fcb6f41: 🦊 Add metamask filtering logic after activate browser wallet
+- 5877e2d: Fix race condition between chain id and provider
+
+## 1.0.8
+
+### Patch Changes
+
+- 24e9668: ⚡️ Add block refresher
+- edfd60b: 😶‍🌫️ Add receipt for executing contract functions and sending transactions
+- a3b1340: 🕸 Change swithNetwork to promise
+- 3d815ab: Ethers as peer deps
+- 4afd9b5: 🎗 Remove chainId requests
+
+## 1.0.7
+
+### Patch Changes
+
+- 2a65bfb: Use more specific imports
+
+## 1.0.6
+
+### Patch Changes
+
+- 6348832: ❗️ Fix exception during estimating gas price
+- 1ce58ad: Add no metamask deactivate option
+
+## 1.0.5
+
+### Patch Changes
+
+- bcff959: Fix ethers version
+- a0ab27f: Remove testing submodule
+
+## 1.0.4
+
+### Patch Changes
+
+- fe52f50: Add fast encoding options
+
+## 1.0.3
+
+### Patch Changes
+
+- 4e8025b: ✖️ Add percentage margin for useTransaction
+- ad8b91a: 🧻 Add useLogs hook
+- 17b8021: 🐛 Fix EventRecord type issue
+- d9e2ff3: Add error throwing to browser wallet activation
+- 3904895: ⚗️ Support `isolatedModules`
+- bd27e6b: Improved handling of Falsy parameters in hooks
+- 5229eea: Update ENS hooks
+- 8701d7d: 🪵 Add useRawLogs hook
+
+## 1.0.2
+
+### Patch Changes
+
+- 37c3b9d: 🪱 Attempt adding network if it isn't added to wallet
+- 083e9b1: Export useBlockNumbers hook as part of internal API
+
+## 1.0.2
+
+### Patch Changes
+
+- 37c3b9d: 🪱 Attempt adding network if it isn't added to wallet
+
+## 1.0.1
+
+### Patch Changes
+
+- 5a16232: Add astar network
+- e978fd9: 🥌 Add static calls
+- 3a108ad: 💤 Add zkSync to known chains
+- 5067120: 🐯 Solve getting lowercase account number from metamask after changing account
+- a40a680: Add Boba network
+
+## 1.0.0
+
+### Major Changes
+
+- 0d2368a: 1.0.0 release
+
+### Minor Changes
+
+- c46b2a1: 🕸️ Add `switchNetwork` to `useEthers`
+
+### Patch Changes
+
+- 669c1fa: 😵‍💫 Export currencyFormattingOptions from model
+- 28287db: 🔝 Update ethers to 5.6.2
+
+## 0.12.9
+
+### Patch Changes
+
+- 2e4b152: Fix race condition in NetworkProvider & fix devtools integration
+- 3d4cf2c: Fix metamask auto-connect behaviour
+- 28afc72: Properly handle unexpected undefined address in useContractCall.
+
+## 0.12.8
+
+### Patch Changes
+
+- e2d9950: Handle different cases of addresses
+- 2d7b1ec: Memoize calldata encoding
+- 0fd73d1: Export readonly networks provider from internal exports
+- 7d4d28b: Optimize getUniqueCalls usage
+
+## 0.12.7
+
+### Patch Changes
+
+- 51377cf: Remove `getAddress` calls due to performance issues
+
+## 0.12.6
+
+### Patch Changes
+
+- 77bb213: Correctly memoize hook results in useContractCalls
+
+## 0.12.5
+
+### Patch Changes
+
+- 42b1652: Make exports from testing and internal point to compiled code
+
+## 0.12.4
+
+### Patch Changes
+
+- fcd1642: Correctly read `chainId` in read-only mode without browser wallet
+- 93967af: Move parts that should be private in @usedapp/core to internal submodule
+- fe1e418: Add `isLoading` to `useEthers` and refactor chainId resolution
+- def0d9c: Properly merge default and supplied configs
+
+## 0.12.3
+
+### Patch Changes
+
+- 30bffcc: Fix queries not working in readonly mode
+
+## 0.12.2
+
+### Patch Changes
+
+- df1adcc: Add support to pass providers in the config
+
+## 0.12.1
+
+### Patch Changes
+
+- 9aefc1d: Fixed pnpm lockfile.
+
+## 0.12.0
+
+### Minor Changes
+
+- 378177c: Fetching state from multiple chains simultaneously
+- e9907a5: Add support for wallet-connect provider
+
+### Patch Changes
+
+- 42e1adc: 🔧 Add typed contract calls
+- ca55dd0: Explicitly export public symbols.
+- d70b866: Review public API and add annotations to public symbols
+- ad021b0: Use pnpm instead of yarn
+
+## 0.11.0
+
+### Minor Changes
+
+- 0029496: Change Metamask connection logic when page is loaded
+
+### Patch Changes
+
+- 3d1ec30: Add sourcemaps to published package
+
+## 0.10.1
+
+### Patch Changes
+
+- a07b14f: 📧 Add useChainMeta hook to get chain metadata from ChainID
+- 9f8ce66: Add Palm Testnet support
+
+## 0.10.0
+
+### Minor Changes
+
+- fd8e924: Remove @web3-react dependency, introduce own way of provider management
+
+### Patch Changes
+
+- c70a76e: Support EIP-1193 providers and legacy web3-react connectors
+
+## 0.9.1
+
+### Patch Changes
+
+- b6fe5e1: Add the Oasis Emerald network
+- 34ba891: Add missing documentation for TransactionStatus
+- d04c8bb: Add the moonbeam network
+
+## 0.9.0
+
+### Minor Changes
+
+- 26a4314: Add resetState function to useContractFunction and useSendTransaction so the UI can be reset easily after a transaction attempt.
+
+### Patch Changes
+
+- 3015cbd: Replace polygon explorer to polyscan
+
+## 0.8.0
+
+### Minor Changes
+
+- 33ade3b: Add PendingSignature TransactionState for transactions that are pending signature. This gets set on each new transaction function call and clears out the previous error when new attempts are made.
+- ece010c: Support Node LTS v14 and v16, abandon v10 and v12
+
+### Patch Changes
+
+- 1c257ce: Use isLocalChain Chain property instead of function
+- e5f0951: Add multicall2 function
+
+## 0.7.3
+
+### Patch Changes
+
+- 99ded36: Add Arbitrum chains
+
+  Add Metis chain
+
+## 0.7.2
+
+### Patch Changes
+
+- 9786e0d: Fixed the chainId property name in the Getting Started
+
+  Add Optimism and Optimism Kovan network configurations
+
+## 0.7.1
+
+### Patch Changes
+
+- d878308: Fix can't resolve 'lodash/merge #432
+
+## 0.7.0
+
+### Minor Changes
+
+- 2f37156: Replace supportedChains with networks in config (#411)
+
+### Patch Changes
+
+- 45a6dc2: Remove warnings when falsy call is passed to useContractCall
+- 2f37156: 🛷 Add useTokenList
+
+## 0.6.3
+
+### Patch Changes
+
+- a12bfeb: Add Moonbase Alpha support (testnet for Moonbeam)
+
+## 0.6.2
+
+### Patch Changes
+
+- 0365a73: 🛷 Add useTokenList
+
+## 0.6.1
+
+### Patch Changes
+
+- e3b9841: Add Songbird support
+- 5a93444: Enable configuring autoconnection for network provider
+
+## 0.6.0
+
+### Minor Changes
+
+- 5365c19: Add Avalanche support
+
+## 0.5.6
+
+### Patch Changes
+
+- b0114b5: Bump ethers version
+- e7175e7: 🦞 Skip multicall if address is undefined
+
+## 0.5.5
+
+### Patch Changes
+
+- bf3b543: Handle dropped and replaced transactions
+
 ## 0.5.4
 
 ### Patch Changes
@@ -122,7 +462,7 @@
 
   "resolutions": {
   "@ethersproject/abi": "5.2.0",
-  "@ethersproject/contracts": "5.2.0"
+  "@ethersproject/contracts": "^5.6.0"
   }
 
 ## 0.3.21

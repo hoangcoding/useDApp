@@ -1,28 +1,9 @@
-import { ChainId } from '../../constants'
-import { FullConfig } from './Config'
+import { DEFAULT_SUPPORTED_CHAINS, FullConfig } from '../../constants'
 
 export const DEFAULT_CONFIG: FullConfig = {
   pollingInterval: 15000,
-  supportedChains: [
-    ChainId.Mainnet,
-    ChainId.Goerli,
-    ChainId.Kovan,
-    ChainId.Rinkeby,
-    ChainId.Ropsten,
-    ChainId.BSC,
-    ChainId.BSCTestnet,
-    ChainId.xDai,
-    ChainId.Localhost,
-    ChainId.Hardhat,
-    ChainId.Polygon,
-    ChainId.Mumbai,
-    ChainId.Theta,
-    ChainId.ThetaTestnet,
-    ChainId.Harmony,
-    ChainId.Moonriver,
-    ChainId.Palm,
-    ChainId.Fantom,
-  ],
+  supportedChains: undefined,
+  networks: DEFAULT_SUPPORTED_CHAINS,
   notifications: {
     checkInterval: 500,
     expirationPeriod: 5000,
@@ -30,4 +11,6 @@ export const DEFAULT_CONFIG: FullConfig = {
   localStorage: {
     transactionPath: 'transactions',
   },
+  autoConnect: true,
+  multicallVersion: 1,
 }
