@@ -1,5 +1,59 @@
 # @usedapp/testing
 
+## 1.1.5
+
+### Patch Changes
+
+- Updated dependencies [ed915f1]
+- Updated dependencies [f420823]
+- Updated dependencies [af0c4c4]
+  - @usedapp/core@1.1.5
+
+## 1.1.4
+
+### Patch Changes
+
+- Updated dependencies [d2a0e57]
+  - @usedapp/core@1.1.4
+
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies [f2c3766]
+- Updated dependencies [3becd1d]
+  - @usedapp/core@1.1.3
+
+## 1.1.2
+
+### Patch Changes
+
+- Updated dependencies [bbb0cc9]
+  - @usedapp/core@1.1.2
+
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [61963a5]
+  - @usedapp/core@1.1.1
+
+## 1.1.0
+
+### Minor Changes
+
+- 9262b2f: Release v1.1.0
+
+## 1.0.16
+
+### Patch Changes
+
+- Updated dependencies [a2f26c2]
+- Updated dependencies [2789dd9]
+- Updated dependencies [69ac77f]
+- Updated dependencies [96a3d85]
+  - @usedapp/core@1.1.0
+
 ## 1.0.15
 
 ### Patch Changes

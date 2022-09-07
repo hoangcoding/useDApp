@@ -1,10 +1,12 @@
 import { expect } from 'chai'
-import { Wallet } from 'ethers'
+import { providers, Wallet } from 'ethers'
 import { useEffect } from 'react'
 import { Config } from '../constants'
-import { Mainnet } from '../model'
-import { renderDAppHook, SECOND_TEST_CHAIN_ID, setupTestingConfig, TestingNetwork } from '../testing'
+import { Localhost, Mainnet, Mumbai } from '../model'
+import { createMockProvider, renderDAppHook, setupTestingConfig, TestingNetwork } from '../testing'
 import { useEthers } from './useEthers'
+
+import Ganache, { Server } from 'ganache'
 
 describe('useEthers', () => {
   let network1: TestingNetwork
@@ -55,7 +57,26 @@ describe('useEthers', () => {
 
     await waitForCurrent((val) => !!val.error)
     expect(result.current.error).not.to.be.undefined
-    expect(result.current.error?.toString()).to.include(`Unsupported chain id: ${SECOND_TEST_CHAIN_ID}`)
+    expect(result.current.error?.toString()).to.include(`Unsupported chain id: ${network2.chainId}`)
+  })
+
+  it('throws error if trying to use not configured network', async () => {
+    const notConfiguerdNetwork = await createMockProvider({ chainId: Localhost.chainId })
+    const { result, waitForCurrent } = await renderDAppHook(
+      () => {
+        const { activate } = useEthers()
+        useEffect(() => {
+          void activate(notConfiguerdNetwork.provider)
+        }, [])
+
+        return useEthers()
+      },
+      { config }
+    )
+
+    await waitForCurrent((val) => !!val.error)
+    expect(result.current.error).not.to.be.undefined
+    expect(result.current.error?.toString()).to.include(`Not configured chain id: ${Localhost.chainId}`)
   })
 
   it('returns correct provider after activation', async () => {
@@ -84,5 +105,33 @@ describe('useEthers', () => {
     expect(result.current.library).to.eq(network2.provider)
     expect(result.current.active).to.be.true
     expect(result.current.isLoading).to.be.false
+  })
+
+  describe('Websocket provider', () => {
+    let ganacheServer: Server<'ethereum'>
+    const wsPort = 18845
+    const wsUrl = `ws://localhost:${wsPort}`
+
+    before(async () => {
+      ganacheServer = Ganache.server({ server: { ws: true } })
+      await ganacheServer.listen(wsPort)
+    })
+
+    after(async () => {
+      await ganacheServer.close()
+    })
+
+    it('works with a websocket provider', async () => {
+      const { result, waitForCurrent } = await renderDAppHook(() => useEthers(), {
+        config: {
+          readOnlyChainId: Mumbai.chainId,
+          readOnlyUrls: {
+            [Mumbai.chainId]: new providers.WebSocketProvider(wsUrl),
+          },
+        },
+      })
+      await waitForCurrent((val) => !val.isLoading)
+      expect(result.error).to.be.undefined
+    })
   })
 })

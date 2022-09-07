@@ -1,39 +1,43 @@
-import { MockProvider } from '@ethereum-waffle/provider'
 import { Contract } from 'ethers'
 import { useToken } from '..'
 import { expect } from 'chai'
-import { renderWeb3Hook, deployMockToken, MOCK_TOKEN_INITIAL_BALANCE } from '../testing'
+import type { Config } from '../constants'
+import {
+  renderDAppHook,
+  deployMockToken,
+  MOCK_TOKEN_INITIAL_BALANCE,
+  TestingNetwork,
+  setupTestingConfig,
+} from '../testing'
 
 describe('useToken', async () => {
-  const mockProvider = new MockProvider()
-  const [deployer] = mockProvider.getWallets()
   let token: Contract
-  let chainId: number
+  let config: Config
+  let network1: TestingNetwork
 
   beforeEach(async () => {
-    chainId = (await mockProvider.getNetwork()).chainId
-    token = await deployMockToken(deployer)
+    ;({ config, network1 } = await setupTestingConfig())
+    token = await deployMockToken(network1.deployer)
   })
 
   it('returns correct token constants', async () => {
-    const { result, waitForCurrent } = await renderWeb3Hook(() => useToken(token.address), {
-      readonlyMockProviders: {
-        [chainId]: mockProvider,
-      },
+    const { result, waitForCurrent } = await renderDAppHook(() => useToken(token.address), {
+      config,
     })
     await waitForCurrent((val) => val !== undefined)
     expect(result.error).to.be.undefined
-    expect(result.current).to.deep.equal({
+    const res = {
       name: 'MOCKToken',
       symbol: 'MOCK',
       decimals: 18,
       totalSupply: MOCK_TOKEN_INITIAL_BALANCE,
-    })
+    }
+    expect(JSON.parse(JSON.stringify(result.current))).to.deep.equal(JSON.parse(JSON.stringify(res)))
   })
 
   it('should not throw error when token address is Falsy', async () => {
-    const { result } = await renderWeb3Hook(() => useToken(null), {
-      mockProvider,
+    const { result } = await renderDAppHook(() => useToken(null), {
+      config,
     })
     expect(result.error).to.be.undefined
     expect(result.current).to.be.undefined

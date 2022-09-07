@@ -5,6 +5,7 @@ import { validateArguments } from '../helpers/validateArgument'
 import { useNetwork } from '../providers'
 import { useConfig } from '../hooks'
 import { useReadonlyNetwork } from './useReadonlyProvider'
+import { useEffect, useState } from 'react'
 
 type JsonRpcProvider = providers.JsonRpcProvider
 type ExternalProvider = providers.ExternalProvider
@@ -64,14 +65,24 @@ export function useEthers(): Web3Ethers {
     isLoading,
   } = useNetwork()
 
-  const { networks } = useConfig()
+  const { networks, readOnlyUrls } = useConfig()
+  const [error, setError] = useState<Error | undefined>(undefined)
+
+  const configuredChainIds = Object.keys(readOnlyUrls || {}).map((chainId) => parseInt(chainId, 10))
   const supportedChainIds = networks?.map((network) => network.chainId)
-  const isUnsupportedChainId = chainId && supportedChainIds && supportedChainIds.indexOf(chainId) < 0
-  const unsupportedChainIdError = new Error(
-    `Unsupported chain id: ${chainId}. Supported chain ids are: ${supportedChainIds}.`
-  )
-  unsupportedChainIdError.name = 'UnsupportedChainIdError'
-  const error = isUnsupportedChainId ? unsupportedChainIdError : errors[errors.length - 1]
+
+  useEffect(() => {
+    const isNotConfiguredChainId = chainId && configuredChainIds && configuredChainIds.indexOf(chainId) < 0
+    const isUnsupportedChainId = chainId && supportedChainIds && supportedChainIds.indexOf(chainId) < 0
+
+    if (isUnsupportedChainId || isNotConfiguredChainId) {
+      const chainIdError = new Error(`${isUnsupportedChainId ? 'Unsupported' : 'Not configured'} chain id: ${chainId}.`)
+      chainIdError.name = 'ChainIdError'
+      setError(chainIdError)
+      return
+    }
+    setError(errors[errors.length - 1])
+  }, [chainId, errors])
 
   const readonlyNetwork = useReadonlyNetwork()
   const provider = networkProvider ?? (readonlyNetwork?.provider as JsonRpcProvider)
@@ -89,9 +100,17 @@ export function useEthers(): Web3Ethers {
       const errChainNotAddedYet = 4902 // Metamask error code
       if (error.code === errChainNotAddedYet) {
         const chain = networks?.find((chain) => chain.chainId === chainId)
-        if (chain?.rpcUrl) {
-          await provider.send('wallet_addEthereumChain', [getAddNetworkParams(chain)])
-        }
+        if (!chain)
+          throw new Error(
+            `ChainId "${chainId}" not found in config.networks. See https://usedapp-docs.netlify.app/docs/Guides/Transactions/Switching%20Networks`
+          )
+        if (!chain.rpcUrl)
+          throw new Error(
+            `ChainId "${chainId}" does not have RPC url configured by default. See https://usedapp-docs.netlify.app/docs/Guides/Transactions/Switching%20Networks`
+          )
+        await provider.send('wallet_addEthereumChain', [getAddNetworkParams(chain)])
+      } else {
+        throw error
       }
     }
   }
@@ -101,7 +120,8 @@ export function useEthers(): Web3Ethers {
   return {
     connector: undefined,
     library: provider,
-    chainId: isUnsupportedChainId ? undefined : networkProvider !== undefined ? chainId : readonlyNetwork?.chainId,
+    chainId:
+      error?.name === 'ChainIdError' ? undefined : networkProvider !== undefined ? chainId : readonlyNetwork?.chainId,
     account,
     active: !!provider,
     activate: async (providerOrConnector: SupportedProviders) => {

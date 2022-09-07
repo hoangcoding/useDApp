@@ -10,7 +10,7 @@ import { BigNumber, Contract, errors, Signer } from 'ethers'
 export async function estimateTransactionGasLimit(
   transactionRequest: TransactionRequest | undefined,
   signer: Signer | undefined,
-  bufferGasLimitPercentage: number
+  gasLimitBufferPercentage: number
 ) {
   if (!signer || !transactionRequest) {
     return undefined
@@ -19,7 +19,7 @@ export async function estimateTransactionGasLimit(
     const estimatedGas = transactionRequest.gasLimit
       ? BigNumber.from(transactionRequest.gasLimit)
       : await signer.estimateGas(transactionRequest)
-    return estimatedGas?.mul(bufferGasLimitPercentage + 100).div(100)
+    return estimatedGas?.mul(gasLimitBufferPercentage + 100).div(100)
   } catch (err: any) {
     console.error(err)
     return undefined
@@ -33,11 +33,11 @@ export async function estimateContractFunctionGasLimit(
   contractWithSigner: Contract,
   functionName: string,
   args: any[],
-  bufferGasLimitPercentage: number
+  gasLimitBufferPercentage: number
 ): Promise<BigNumber | undefined> {
   try {
     const estimatedGas = await contractWithSigner.estimateGas[functionName](...args)
-    const gasLimit = estimatedGas?.mul(bufferGasLimitPercentage + 100).div(100)
+    const gasLimit = estimatedGas?.mul(gasLimitBufferPercentage + 100).div(100)
     return gasLimit
   } catch (err: any) {
     console.error(err)
@@ -81,6 +81,7 @@ export function usePromiseTransaction(chainId: number | undefined, options?: Tra
       } catch (e: any) {
         const parsedErrorCode = parseInt(e.error?.data?.code ?? e.error?.code ?? e.data?.code ?? e.code)
         const errorCode = isNaN(parsedErrorCode) ? undefined : parsedErrorCode
+        const errorHash = e?.error?.data?.originalError?.data ?? e?.error?.data
         const errorMessage = e.error?.data?.message ?? e.error?.message ?? e.reason ?? e.data?.message ?? e.message
         if (transaction) {
           const droppedAndReplaced = isDroppedAndReplaced(e)
@@ -108,13 +109,14 @@ export function usePromiseTransaction(chainId: number | undefined, options?: Tra
               receipt: e.receipt,
               errorMessage,
               errorCode,
+              errorHash,
               chainId,
             })
           } else {
-            setState({ status: 'Fail', transaction, receipt: e.receipt, errorMessage, errorCode, chainId })
+            setState({ status: 'Fail', transaction, receipt: e.receipt, errorMessage, errorCode, errorHash, chainId })
           }
         } else {
-          setState({ status: 'Exception', errorMessage, errorCode, chainId })
+          setState({ status: 'Exception', errorMessage, errorCode, errorHash, chainId })
         }
         return undefined
       }

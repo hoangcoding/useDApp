@@ -17,7 +17,7 @@ Mapping of ``ChainId``'s to node URLs to use in read-only mode.
   {
     ...
     readOnlyUrls: {
-      [Mainnet.chainID]: 'https://mainnet.infura.io/v3/62687d1a985d4508b2b7a24827551934'
+      [Mainnet.chainId]: 'https://mainnet.infura.io/v3/62687d1a985d4508b2b7a24827551934'
     }
   }
 ```
@@ -274,6 +274,16 @@ Fields:
 
 - ``transactionName?: string`` - specifies a transaction name. Used by notifications and history hooks.
 
+- ``gasLimitBufferPercentage?: number`` - If set, adds an additional buffer to estimated gas limit before sending a transaction.
+Useful if a gas limit of a transaction can be different depending on the state of the blockchain.
+Gas estimation can be not accurate because the state of the blockchain can change between the time of estimation and the time of transaction mining.
+
+This will add additional 10% of gasLimit to estimates:
+
+```
+gasLimitBufferPercentage: 10
+```
+
 ## TransactionStatus
 
 Represents a state of a single transaction.
@@ -288,7 +298,7 @@ Fields:
 
 - ``receipt?: TransactionReceipt`` - optional field. See [Transaction Receipt](https://docs.ethers.io/v5/api/providers/types/#providers-TransactionReceipt).
 
-- ``chainId?: ChainId`` - optional field. See [ChainID](#chainid).
+- ``chainId?: ChainId`` - optional field. See [ChainId](#chainid).
 
 - ``errorMessage?: string`` - optional field that contains error message when transaction fails or throws.
 
@@ -327,7 +337,7 @@ Optional overrides for hooks querying the state of the blockchain.
 
 An object consisting of:
 
-- ``chainId?: ChainId`` - ChainId of the chain you want to perform the query on. Defaults to the chainId of the connected wallet. See [ChainID](#chainid).
+- ``chainId?: ChainId`` - ChainId of the chain you want to perform the query on. Defaults to the chainId of the connected wallet. See [ChainId](#chainid).
 - ``isStatic?: boolean`` - Whether the query is static (not expected to change between calls). Used for optimizations.
 
 ## LogQueryParams
